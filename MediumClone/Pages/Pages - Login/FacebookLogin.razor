@@ -1,0 +1,28 @@
+﻿@page "/facebook-login"
+@layout MinimalLayout
+
+<div style="text-align: center; position: relative; top: 100px; margin-bottom: 20px;">
+    <h1 style="color: darksalmon;">Facebook Login</h1>
+    <p>Please log in using your Facebook account.</p>
+</div>
+
+<iframe src="https://www.facebook.com/login"
+        style="border: none; width: 60%; height: 400px; position: relative; left: 20em;">
+</iframe>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Wait for 3 seconds (3000ms)
+            await Task.Delay(3000);
+
+            // Redirect to the Counter page
+            NavigationManager.NavigateTo("/counter");
+        }
+    }
+}

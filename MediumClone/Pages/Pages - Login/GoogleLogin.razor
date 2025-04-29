@@ -1,0 +1,28 @@
+﻿@page "/google-login"
+@layout MinimalLayout
+
+<div style="text-align: center; position: relative; top: 100px; margin-bottom: 20px;">
+    <h1 style="color: darksalmon;">Google Login</h1>
+    <p>Please log in using your Google account.</p>
+</div>
+
+<iframe src="https://accounts.google.com/signin/v2/identifier"
+        style="border: none; width: 60%; height: 400px; position: relative; left: 20em;">
+</iframe>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Wait for 3 seconds (3000ms)
+            await Task.Delay(3000);
+
+            // Redirect to the Counter page
+            NavigationManager.NavigateTo("/counter");
+        }
+    }
+}

@@ -1,0 +1,66 @@
+﻿@inherits LayoutComponentBase
+
+@using MediumClone.Shared
+
+<div class="header">
+    <div class="logo">MOReal</div>
+    <nav class="navigation">
+        <NavLink href="/ourstory" class="nav-item" active="active-nav-item">Our Story</NavLink>
+        <NavLink href="/membership" class="nav-item" active="active-nav-item">Membership</NavLink>
+        <NavLink href="/write" class="nav-item" active="active-nav-item">Write</NavLink>
+        
+        <a class="nav-item" @onclick="OpenSignIn">Sign in</a>
+        <button class="get-started nav-item" @onclick="OpenSignUp">Get started</button>
+    </nav>
+</div>
+
+<SignUpModal IsVisible="@IsSignUpVisible" OnClose="CloseSignUp" OnSwitchToSignIn="SwitchToSignIn" />
+
+<SignInModal IsVisible="@IsSignInVisible" OnClose="CloseSignIn" OnSwitchToSignUp="SwitchToSignUp" />
+
+<ContentSection />
+
+<Footer />
+
+@code 
+{
+    private bool IsSignUpVisible = false;
+
+    private bool IsSignInVisible = false;
+
+    private void OpenSignUp()
+    {
+        IsSignUpVisible = true;
+        IsSignInVisible = false;
+    }
+
+    private void OpenSignIn()
+    {
+        IsSignInVisible = true;
+        IsSignUpVisible = false;
+    }
+
+    private void CloseSignUp()
+    {
+        IsSignUpVisible = false;
+    }
+
+    private void CloseSignIn()
+    {
+        IsSignInVisible = false;
+    }
+
+    private void SwitchToSignIn()
+    {
+        IsSignInVisible = true;
+        IsSignUpVisible = false;
+    }
+
+    private void SwitchToSignUp()
+    {
+        IsSignInVisible = false;
+        IsSignUpVisible = true;
+    }
+}
+
+

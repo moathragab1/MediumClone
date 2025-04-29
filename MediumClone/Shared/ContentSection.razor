@@ -1,0 +1,61 @@
+﻿<div class="content-section">
+    <div class="text-content">
+        <h1>Human <br /> stories & ideas</h1>
+        <p>A place to read, write, and deepen your understanding.</p>
+
+        <button class="start-reading" @onclick="OpenSignUp">StartReading</button>
+    </div>
+    <div class="image-content">
+        <img src="images/firefox_logo-only_RGB.png" alt="Custom Illustration" class="illustration" />
+    </div>
+</div>
+
+<SignUpModal IsVisible="@IsSignUpVisible"
+             OnClose="CloseSignUp"
+             OnSwitchToSignIn="SwitchToSignIn" />
+
+<SignInModal IsVisible="@IsSignInVisible"
+             OnClose="CloseSignIn"
+             OnSwitchToSignUp="SwitchToSignUp" />
+
+@code
+{
+    @code {
+        private bool IsSignUpVisible = false;
+        private bool IsSignInVisible = false;
+
+        private void OpenSignUp()
+        {
+            IsSignUpVisible = true;
+            IsSignInVisible = false;
+        }
+
+        private void OpenSignIn()
+        {
+            IsSignInVisible = true;
+            IsSignUpVisible = false;
+        }
+
+        private void CloseSignUp()
+        {
+            IsSignUpVisible = false;
+        }
+
+        private void CloseSignIn()
+        {
+            IsSignInVisible = false;
+        }
+
+        private void SwitchToSignIn()
+        {
+            IsSignInVisible = true;
+            IsSignUpVisible = false;
+        }
+
+        private void SwitchToSignUp()
+        {
+            IsSignInVisible = false;
+            IsSignUpVisible = true;
+        }
+    }
+}

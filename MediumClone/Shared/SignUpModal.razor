@@ -1,0 +1,72 @@
+﻿@if (IsVisible)
+{
+    <div class="model-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <h2 class="modal-h">Join MOReal.</h2>
+            <div class="button-accounall">
+                <button class="auth-button google" @onclick="NavigateToGoogle">
+                    <img src="images/google.png" alt="Google Logo" class="Icon" /> Sign up with Google
+                </button>
+                <button class="auth-button facebook" @onclick="NavigateToFacebook">
+                    <img src="images/facebook.png" alt="Facebook Logo" class="Icon" /> Sign up with Facebook
+                </button>
+                <button class="auth-button email" @onclick="NavigateToEmailPage">
+                    <img src="images/mail.png" alt="Email Logo" class="Icon" /> Sign up with Email
+                </button>
+            </div>
+
+            <p class="space-bet">
+                Already have an account? <button class="url-del" @onclick="SwitchToSignIn">Sign in</button>
+            </p>
+            <small class="space-bet-2">
+                By signing up, you agree to Medium`s
+                <a href="/terms" class="">Terms of Service</a> and
+                <a href="/privacy">Privacy Policy</a>
+            </small>
+        </div>
+    </div>
+}
+
+@code
+{
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private void NavigateToGoogle()
+    {
+        // Navigate to the Google login page
+        NavigationManager.NavigateTo("/google-login");
+    }
+
+    private void NavigateToFacebook()
+    {
+        // Navigate to the Facebook login page
+        NavigationManager.NavigateTo("/facebook-login");
+    }
+
+    private void NavigateToEmailPage()
+    {
+        // Navigate to email registration page
+        NavigationManager.NavigateTo("/email-registration");
+    }
+
+    private void CloseModal()
+    {
+        IsVisible = false;
+        OnClose.InvokeAsync(IsVisible);
+    }
+
+    private void SwitchToSignIn()
+    {
+        OnSwitchToSignIn.InvokeAsync();
+    }
+
+    [Parameter]
+    public bool IsVisible { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnSwitchToSignIn { get; set; }
+}

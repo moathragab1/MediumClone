@@ -1,0 +1,195 @@
+﻿@page "/counter"
+@layout MinimalLayout
+
+<PageTitle>Counter</PageTitle>
+
+@if (!showSecondWindow)
+{
+    <div class="window">
+        <h1>Select Your Favorite Sports</h1>
+        <p>You can select up to 4 options.</p>
+
+        <div class="grid">
+            @foreach (var sport in sports)
+            {
+                <div class="option @GetOptionClass(sport)" @onclick="() => ToggleSelection(sport)">
+                    @sport
+                </div>
+            }
+        </div>
+
+        <p>Selected: @selectedOptions.Count / 4</p>
+
+        <button class="btn btn-primary" @onclick="GoToNextWindow" disabled="@(!CanProceed)">Next</button>
+    </div>
+}
+else
+{
+    <div class="window">
+        <h1>Your Selected Sports</h1>
+        <div class="horizontal-list">
+            @foreach (var sport in selectedOptions)
+            {
+                <div class="list-item">
+                    <h3>@sport</h3>
+                    <button class="btn btn-secondary" @onclick="() => OpenWriteModal(sport)">Write</button>
+                    <ul>
+                        @if (texts.ContainsKey(sport))
+                        {
+                            @foreach (var text in texts[sport])
+                            {
+                                <li>@text</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+
+        @if (isModalVisible)
+        {
+            <div class="modal-overlay" @onclick="CloseModal">
+                <div class="modal-content" @onclick:stopPropagation>
+                    <h3>Write for @currentSport</h3>
+                    <textarea @bind="currentText"></textarea>
+                    <button class="btn btn-primary" @onclick="SaveText">Save</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<string> sports = new()
+    {
+        "Football", "Basketball", "Tennis", "Cricket", "Baseball",
+        "Hockey", "Golf", "Rugby", "Swimming", "Boxing",
+        "Cycling", "Running", "Skiing", "Skating", "Surfing",
+        "Volleyball", "Badminton", "Table Tennis", "Wrestling", "Karate"
+    };
+
+    private HashSet<string> selectedOptions = new();
+    private Dictionary<string, List<string>> texts = new();
+    private bool showSecondWindow = false;
+    private bool isModalVisible = false;
+    private string currentSport = string.Empty;
+    private string currentText = string.Empty;
+
+    private void ToggleSelection(string sport)
+    {
+        if (selectedOptions.Contains(sport))
+        {
+            selectedOptions.Remove(sport);
+        }
+        else if (selectedOptions.Count < 4)
+        {
+            selectedOptions.Add(sport);
+        }
+    }
+
+    private string GetOptionClass(string sport)
+    {
+        return selectedOptions.Contains(sport) ? "selected" : string.Empty;
+    }
+
+    private bool CanProceed => selectedOptions.Count == 4;
+
+    private void GoToNextWindow()
+    {
+        showSecondWindow = true;
+    }
+
+    private void OpenWriteModal(string sport)
+    {
+        currentSport = sport;
+        currentText = string.Empty;
+        isModalVisible = true;
+    }
+
+    private void SaveText()
+    {
+        if (!texts.ContainsKey(currentSport))
+        {
+            texts[currentSport] = new List<string>();
+        }
+
+        texts[currentSport].Add(currentText);
+        isModalVisible = false;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+    }
+}
+
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        justify-content: center;
+        margin: 20px auto;
+    }
+
+    .option {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s;
+    }
+
+        .option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .option.selected {
+            background-color: #1a73e8;
+            color: white;
+        }
+
+    .horizontal-list {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px auto;
+    }
+
+    .list-item {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        width: 200px;
+        text-align: center;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+</style>

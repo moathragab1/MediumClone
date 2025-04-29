@@ -1,0 +1,70 @@
+﻿@if (IsVisible)
+{
+    <div class="model-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <h2 class="modal-h">Welcome Back!</h2>
+            <div class="button-accountall-2">
+                <button class="auth-button google" @onclick="NavigateToGoogle">
+                    <img src="images/google.png" alt="Google Logo" class="Icon" /> Sign in with Google
+                </button>
+                <button class="auth-button facebook" @onclick="NavigateToFacebook">
+                    <img src="images/facebook.png" alt="Facebook Logo" class="Icon" /> Sign in with Facebook
+                </button>
+                <button class="auth-button email" @onclick="NavigateToEmailPage">
+                    <img src="images/mail.png" alt="Email Logo" class="Icon" /> Sign in with Email
+                </button>
+            </div>
+
+            <p class="space-bet-22">
+                No account yet? <button class="url-del" @onclick="SwitchToSignUp">Create one</button>
+            </p>
+            <small class="space-bet-2-2">
+                Forgot email or password? <a href="/help">Get help</a>.
+            </small>
+        </div>
+    </div>
+}
+
+@code
+{
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private void NavigateToGoogle()
+    {
+        // Navigate to the Google login page
+        NavigationManager.NavigateTo("/google-login");
+    }
+
+    private void NavigateToFacebook()
+    {
+        // Navigate to the Facebook login page
+        NavigationManager.NavigateTo("/facebook-login");
+    }
+
+    private void NavigateToEmailPage()
+    {
+        // Navigate to email login page
+        NavigationManager.NavigateTo("/email-login");
+    }
+
+    private void CloseModal()
+    {
+        IsVisible = false;
+        OnClose.InvokeAsync(IsVisible);
+    }
+
+    private void SwitchToSignUp()
+    {
+        OnSwitchToSignUp.InvokeAsync();
+    }
+
+    [Parameter]
+    public bool IsVisible { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnSwitchToSignUp { get; set; }
+}
